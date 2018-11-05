@@ -1,2 +1,2 @@
 # Cart-Motion
-Embedded Software for the motion of our SmartPlant cart
+Embedded Software for the motion of our PowerPlant cart
