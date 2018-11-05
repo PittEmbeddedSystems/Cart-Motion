@@ -65,6 +65,7 @@ def turn_left(t):
 	time.sleep(t)
 	GPIO.cleanup()
 
+
 # Stop all cart motion for t seconds
 def stop_motion(t):
 	init()
@@ -77,13 +78,10 @@ def stop_motion(t):
 # Drive Forward, then Reverse, then over again
 def main():
 	# Drive forward
-	forward_motion(2)
+	forward_motion(5)
 
 	# Drive backward
-	reverse_motion(2)
-
-	# Stop
-	stop_motion(2)
+	reverse_motion(5)
 
 	# Turn right
 	turn_right(5)
