@@ -1,4 +1,5 @@
-from RPi.GPIO import GPIO
+import RPi.GPIO as GPIO
+import time
 
 class CartMoveController(object):
     def __init__(self, speed):
@@ -21,12 +22,13 @@ class CartMoveController(object):
         GPIO.output(29, GPIO.HIGH)
 
         # Set frequency to 1kHz
-        pwm = GPIO.PWM(29, 1000)
+        self.pwm = GPIO.PWM(29, 1000)
 
         # After relating speed to duty cycle
-        pwm.start(speed)
+        self.pwm.start(speed)
         
     def __del__(self):
+        self.pwm = 0
         GPIO.cleanup()
         
     # Reverse Motion for t seconds
