@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import RPi.GPIO as GPIO
-import time 
+import time, sys
+import pigpio
 
 # Motor Driver Controls
 # Counterclockwise - IN_1/IN_2 = LOW/HIGH
@@ -9,37 +10,80 @@ import time
 # Stop - IN_1/IN_2 = LOW/LOW
 
 
+###########Front of Cart#############
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#                                   #
+#32/36                              #38/40
+#                                   #
+#                                   #
+###########Back of Cart##############
+
+
+
 def init():
 	# Set the mode to GPIO.Board
 	GPIO.setmode(GPIO.BOARD)
 
 	# Output GPIO pins for the left side of the cart
-	GPIO.setup(32, GPIO.OUT) # IN_1
-	GPIO.setup(36, GPIO.OUT) # IN_2
+	GPIO.setup(32, GPIO.OUT) # A_IN_1
+	GPIO.setup(36, GPIO.OUT) # A_IN_2
 
 	# Output GPIO pins for the right side of the cart
-	GPIO.setup(38, GPIO.OUT) # IN_1
-	GPIO.setup(40, GPIO.OUT) # IN_2
+	GPIO.setup(38, GPIO.OUT) # B_IN_1
+	GPIO.setup(40, GPIO.OUT) # B_IN_2
+
+	# Output GPIO pins to control the speed of the wheels
+	GPIO.setup(35, GPIO.OUT) # PWM
+
+	# Set frequency to 1kHz
+	pwm = GPIO.PWM(35, 1000)
+
+	# Set Duty Cycle to 50%
+	pwm.start(50)
 
 
 # Reverse Motion for t seconds
 def reverse_motion(t):
 	init()
-	low_channels = [32, 40]
-	high_channels = [36, 38]
-	GPIO.output(low_channels, GPIO.LOW)
-	GPIO.output(high_channels, GPIO.HIGH)
+
+	# Right Wheel Clockwise
+	GPIO.output(32, GPIO.LOW)
+	GPIO.output(36, GPIO.HIGH)
+
+	# Left Wheel CCL
+	GPIO.output(38, GPIO.HIGH)
+	GPIO.output(40, GPIO.LOW)
+
 	time.sleep(t)
 	GPIO.cleanup()
 
 
 #   Forward Motion for t seconds
+#   Right spins clockwise, left counterclockwise
 def forward_motion(t):
 	init()
-	low_channels = [36, 38]
-	high_channels = [32, 40]
-	GPIO.output(low_channels, GPIO.LOW)
-	GPIO.output(high_channels, GPIO.HIGH)
+
+	# Right Wheel Clockwise
+	GPIO.output(32, GPIO.HIGH)
+	GPIO.output(36, GPIO.LOW)
+
+	# Left Wheel CCL
+	GPIO.output(38, GPIO.LOW)
+	GPIO.output(40, GPIO.HIGH)
+
 	time.sleep(t)
 	GPIO.cleanup()
 
@@ -47,10 +91,15 @@ def forward_motion(t):
 # All wheels must turn counterclockwise to turn the cart right for t seconds
 def turn_right(t):
 	init()
-	low_channels = [32, 38]
-	high_channels = [36, 40]
-	GPIO.output(low_channels, GPIO.LOW)
-	GPIO.output(high_channels, GPIO.HIGH)
+
+	# Right Wheel CCL
+	GPIO.output(32, GPIO.LOW)
+	GPIO.output(36, GPIO.HIGH)
+
+	# Left Wheel CCL
+	GPIO.output(38, GPIO.LOW)
+	GPIO.output(40, GPIO.HIGH)
+
 	time.sleep(t)
 	GPIO.cleanup()
 
@@ -58,10 +107,15 @@ def turn_right(t):
 # All wheels must turn clockwise to turn the cart left for t seconds
 def turn_left(t):
 	init()
-	low_channels = [36, 40]
-	high_channels = [32, 38]
-	GPIO.output(low_channels, GPIO.LOW)
-	GPIO.output(high_channels, GPIO.HIGH)
+
+	# Right Wheel Clockwise
+	GPIO.output(32, GPIO.HIGH)
+	GPIO.output(36, GPIO.LOW)
+
+	# Left Wheel Clockwise
+	GPIO.output(38, GPIO.HIGH)
+	GPIO.output(40, GPIO.LOW)
+
 	time.sleep(t)
 	GPIO.cleanup()
 
@@ -78,19 +132,16 @@ def stop_motion(t):
 # Drive Forward, then Reverse, then over again
 def main():
 	# Drive forward
-	forward_motion(5)
+	forward_motion(10)
 
 	# Drive backward
-	reverse_motion(5)
+	#reverse_motion(1)
 
 	# Turn right
-	turn_right(5)
+	#turn_right(2)
 
 	# Turn left
-	turn_left(5)
-
-	# Stop
-	stop_motion(2)
+	#turn_left(2)
 
 	exit(0)
 
