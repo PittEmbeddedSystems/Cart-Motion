@@ -34,11 +34,11 @@ class CartMoveController(object):
     # Reverse Motion for t seconds
     def reverse_motion(self, t):
 
-        # Right Wheel Clockwise
+        # Right Wheel Counter-Clockwise
         GPIO.output(32, GPIO.LOW)
         GPIO.output(36, GPIO.HIGH)
 
-        # Left Wheel CCL
+        # Left Wheel Clockwise
         GPIO.output(38, GPIO.HIGH)
         GPIO.output(40, GPIO.LOW)
 
