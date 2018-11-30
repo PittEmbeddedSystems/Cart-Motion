@@ -27,6 +27,12 @@ class CartMoveController(object):
         # After relating speed to duty cycle
         self.pwm.start(speed)
 
+        # We made these measurements empirically so they're kind of magical
+        self._turning_duty_cycle = 40
+        self._degrees_per_second = 16
+        self._straight_duty_cycle = 20
+        self._cm_per_second = 7
+
     def __del__(self):
         self.pwm = 0
         GPIO.cleanup()
@@ -89,7 +95,7 @@ class CartMoveController(object):
     def turn_left(self, move_duration_secs):
 
 
-        self.pwm.ChangeDutyCycle(40)
+        self.pwm.ChangeDutyCycle(self._turning_duty_cycle)
         # Right Wheel CCL
         GPIO.output(32, GPIO.LOW)
         GPIO.output(36, GPIO.HIGH)
@@ -103,7 +109,7 @@ class CartMoveController(object):
 
     # All wheels must turn counterclockwise to turn the cart right for t seconds
     def turn_right(self, move_duration_secs):
-        self.pwm.ChangeDutyCycle(40)
+        self.pwm.ChangeDutyCycle(self._turning_duty_cycle)
         # Right Wheel Clockwise
         GPIO.output(32, GPIO.HIGH)
         GPIO.output(36, GPIO.LOW)
