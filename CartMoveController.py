@@ -31,6 +31,29 @@ class CartMoveController(object):
         self.pwm = 0
         GPIO.cleanup()
 
+    def make_a_move(self, turn_angle, driving_distance):
+        """
+        This method initiates a movement action from the cart. It accepts a
+        turning angle in degrees and a driving distance in cm. Upon running this
+        method the cart will first rotate itself in accordance with the turn_angle
+        and then it will drive either directly forward or directly backward based
+        on the driving_distance. Forward for positive distances, reverse for 
+        negative distances.
+
+        NOTE: This method expects turn_angles to be in the range [-180, 180)
+        """
+
+        if turn_angle < 0:
+            self.turn_left(-1 * turn_angle)
+        else if turn_angle > 0:
+            self.turn_right(turn_angle)
+
+        if driving_distance > 0:
+            self.forward_motion(driving_distance)
+        else
+            self.reverse_motion(driving_distance)
+        pass
+
     #   Forward Motion for t seconds
     #   Right spins clockwise, left counterclockwise
     def forward_motion(self, move_duration_secs):
