@@ -31,8 +31,9 @@ class CartMoveController(object):
         self.pwm = 0
         GPIO.cleanup()
 
-    # Reverse Motion for t seconds
-    def reverse_motion(self, move_duration_secs):
+    #   Forward Motion for t seconds
+    #   Right spins clockwise, left counterclockwise
+    def forward_motion(self, move_duration_secs):
 
         self.pwm.ChangeDutyCycle(20)
         # Right Wheel Clockwise
@@ -46,10 +47,9 @@ class CartMoveController(object):
         time.sleep(move_duration_secs)
         self.halt_motion()
 
-    #   Forward Motion for t seconds
-    #   Right spins clockwise, left counterclockwise
-    def forward_motion(self, move_duration_secs):
 
+    # Reverse Motion for t seconds
+    def reverse_motion(self, move_duration_secs):
         self.pwm.ChangeDutyCycle(20)
         # Right Wheel Clockwise
         GPIO.output(32, GPIO.HIGH)
@@ -62,9 +62,9 @@ class CartMoveController(object):
         time.sleep(move_duration_secs)
         self.halt_motion()
 
+    # All wheels must turn clockwise to turn the cart left for t seconds
+    def turn_left(self, move_duration_secs):
 
-    # All wheels must turn counterclockwise to turn the cart right for t seconds
-    def turn_right(self, move_duration_secs):
 
         self.pwm.ChangeDutyCycle(40)
         # Right Wheel CCL
@@ -78,10 +78,8 @@ class CartMoveController(object):
         time.sleep(move_duration_secs)
         self.halt_motion()
 
-
-    # All wheels must turn clockwise to turn the cart left for t seconds
-    def turn_left(self, move_duration_secs):
-
+    # All wheels must turn counterclockwise to turn the cart right for t seconds
+    def turn_right(self, move_duration_secs):
         self.pwm.ChangeDutyCycle(40)
         # Right Wheel Clockwise
         GPIO.output(32, GPIO.HIGH)
