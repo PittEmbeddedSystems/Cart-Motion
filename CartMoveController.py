@@ -51,12 +51,12 @@ class CartMoveController(object):
 
         if turn_angle < 0:
             self.turn_left(-1 * turn_angle)
-        else if turn_angle > 0:
+        elif turn_angle > 0:
             self.turn_right(turn_angle)
 
         if driving_distance > 0:
             self.forward_motion(driving_distance)
-        else
+        else:
             self.reverse_motion(driving_distance)
         pass
 
