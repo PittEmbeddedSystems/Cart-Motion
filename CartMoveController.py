@@ -57,7 +57,7 @@ class CartMoveController(object):
         if driving_distance > 0:
             self.forward_motion(driving_distance / self._cm_per_second)
         else:
-            self.reverse_motion(driving_distance / self._cm_per_second)
+            self.reverse_motion(-1 * driving_distance / self._cm_per_second)
         pass
 
     #   Forward Motion for t seconds
@@ -66,12 +66,12 @@ class CartMoveController(object):
 
         self.pwm.ChangeDutyCycle(20)
         # Right Wheel Clockwise
-        GPIO.output(32, GPIO.LOW)
-        GPIO.output(36, GPIO.HIGH)
+        GPIO.output(36, GPIO.LOW)
+        GPIO.output(32, GPIO.HIGH)
 
         # Left Wheel CCL
-        GPIO.output(40, GPIO.HIGH)
-        GPIO.output(38, GPIO.LOW)
+        GPIO.output(38, GPIO.HIGH)
+        GPIO.output(40, GPIO.LOW)
 
         time.sleep(move_duration_secs)
         self.halt_motion()
@@ -81,12 +81,12 @@ class CartMoveController(object):
     def reverse_motion(self, move_duration_secs):
         self.pwm.ChangeDutyCycle(20)
         # Right Wheel Clockwise
-        GPIO.output(32, GPIO.HIGH)
-        GPIO.output(36, GPIO.LOW)
+        GPIO.output(36, GPIO.HIGH)
+        GPIO.output(32, GPIO.LOW)
 
         # Left Wheel CCL
-        GPIO.output(40, GPIO.LOW)
-        GPIO.output(38, GPIO.HIGH)
+        GPIO.output(38, GPIO.LOW)
+        GPIO.output(40, GPIO.HIGH)
 
         time.sleep(move_duration_secs)
         self.halt_motion()
