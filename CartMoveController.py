@@ -29,9 +29,9 @@ class CartMoveController(object):
 
         # We made these measurements empirically so they're kind of magical
         self._turning_duty_cycle = 40
-        self._degrees_per_second = 16
+        self._degrees_per_second = 90
         self._straight_duty_cycle = 20
-        self._cm_per_second = 7
+        self._cm_per_second = 11
 
     def __del__(self):
         self.pwm = 0
